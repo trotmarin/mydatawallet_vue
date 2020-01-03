@@ -27,7 +27,7 @@ export default new Vuex.Store({
     // },
 
     setInputInfo : async (context, inputinfos) => {
-      let { data } = await Axios.post('http://127.0.0.1:8080/user_info', inputinfos)
+      let { data } = await Axios.post('https://blooming-cove-56374.herokuapp.com/user_info', inputinfos)
       if(data.status == 200 ){
       context.commit('ADD_INPUTINFO', inputinfos)
       }
