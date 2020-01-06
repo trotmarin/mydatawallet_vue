@@ -8,13 +8,13 @@
                     <div class="card-body">
                         <!-- <form @submit="formSubmit"> -->
                         <strong>자주쓰는 ID:</strong>
-                        <input type="text" class="form-control" v-model="email"  style="background-color: #ffe3d1;">
+                        <input type="text" class="form-control" v-model="email" placeholder="필수항목" style="background-color: #ffe3d1;">
                         <br>
                         <strong>휴대폰번호(예>01090412798):</strong>
-                        <input type="text" class="form-control" v-model="hp" style="background-color: #ffe3d1;">
+                        <input type="text" class="form-control" v-model="hp" placeholder="필수항목" style="background-color: #ffe3d1;">
                         <br>
                         <strong>대표 계좌번호(예>40040101010231):</strong>
-                        <input type="text" class="form-control" v-model="account" style="background-color: #ffe3d1;">
+                        <input type="text" class="form-control" v-model="account" placeholder="필수항목" style="background-color: #ffe3d1;">
                         <br>
                       
                         <!-- </form> -->
@@ -29,13 +29,13 @@
                         <!-- <form @submit="formSubmit"> -->
                         
                         <strong>이름:</strong>
-                        <input type="text" class="form-control" v-model="name" style="background-color: #ffe3d1">
+                        <input type="text" class="form-control" v-model="name" placeholder="필수항목"  style="background-color: #ffe3d1">
                         <br>
                         <strong>직장명(예>국민은행):</strong>
                         <input type="text" class="form-control" v-model="inputinfos.company">
                         <br>
                         <strong>주소(예>여의도동 광장아파트 1동 1001호):</strong>
-                        <input type="text" class="form-control" v-model="address" style="background-color: #ffe3d1;">
+                        <input type="text" class="form-control" v-model="address" placeholder="필수항목" style="background-color: #ffe3d1;">
                         <br>
                         <strong>생년월일(예>810520):</strong>
                         <input type="text" class="form-control" v-model="inputinfos.borndate">
@@ -84,6 +84,7 @@
 import { mapState } from 'vuex'
 import axios from 'axios'
 
+
 export default {
   name: 'InputInfo',
 
@@ -95,15 +96,22 @@ export default {
         address: '',
         name: '',
     }},
+
+  mounted () {
+    this.$store.dispatch('loadInputInfo')
+  },
+ 
   computed: mapState([
     'inputinfos'
   ]),
   methods : {
       postInputInfo : function() {
+        
+        var hp_sub = this.hp.substr( this.hp.length-4, 4 )
         axios.post('https://blooming-cove-56374.herokuapp.com/user_info/', 
         {
           email: this.email,
-          hp: this.hp,
+          hp: hp_sub,
           account: this.account,
           address: this.address,
           name: this.name,

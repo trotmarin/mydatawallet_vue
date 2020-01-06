@@ -33,6 +33,17 @@ export default new Vuex.Store({
     //    })
     //   },
 
+    loadInputInfo ({ commit }) {
+      axios
+        // .get('http://127.0.0.1:8080/google_web/list_only/')
+        .get('https://blooming-cove-56374.herokuapp.com/user_info/')
+        .then(r => r.data)
+        .then(inputinfos => {
+        commit('SET_INPUTINFO', inputinfos)
+        })
+    },
+
+  
     loadGoogleWeb ({ commit }) {
       axios
         // .get('http://127.0.0.1:8080/google_web/list_only/')
@@ -75,8 +86,8 @@ export default new Vuex.Store({
 
   },
   mutations: {
-    ADD_INPUTINFO : (state, inputinfos) => {
-      state.inputinfos.push(inputinfos)
+    SET_INPUTINFO : (state, inputinfos) => {
+      state.inputinfos =inputinfos
     },
     SET_GOOGLEWEB (state, googlewebs) {
       state.googlewebs = googlewebs
