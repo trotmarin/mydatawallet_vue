@@ -6,18 +6,18 @@
                 <div class="card">
                     <div class="card-header"><h5>INFO GROUP 1</h5></div>
                     <div class="card-body">
-                        <form @submit="formSubmit">
+                        <!-- <form @submit="formSubmit"> -->
                         <strong>자주쓰는 ID:</strong>
-                        <input type="text" class="form-control" v-model="inputinfos.userid"  style="background-color: #ffe3d1;">
+                        <input type="text" class="form-control" v-model="email"  style="background-color: #ffe3d1;">
                         <br>
                         <strong>휴대폰번호(예>01090412798):</strong>
-                        <input type="text" class="form-control" v-model="inputinfos.phone" style="background-color: #ffe3d1;">
+                        <input type="text" class="form-control" v-model="hp" style="background-color: #ffe3d1;">
                         <br>
                         <strong>대표 계좌번호(예>40040101010231):</strong>
-                        <input type="text" class="form-control" v-model="inputinfos.account" style="background-color: #ffe3d1;">
+                        <input type="text" class="form-control" v-model="account" style="background-color: #ffe3d1;">
                         <br>
                       
-                        </form>
+                        <!-- </form> -->
                     </div>
                 </div>
             </div>
@@ -26,21 +26,21 @@
                 <div class="card">
                     <div class="card-header"><h5>INFO GROUP 2</h5></div>
                     <div class="card-body">
-                        <form @submit="formSubmit">
+                        <!-- <form @submit="formSubmit"> -->
                         
                         <strong>이름:</strong>
-                        <input type="text" class="form-control" v-model="inputinfos.name" style="background-color: #ffe3d1">
+                        <input type="text" class="form-control" v-model="name" style="background-color: #ffe3d1">
                         <br>
                         <strong>직장명(예>국민은행):</strong>
-                        <input type="text" class="form-control" v-model="inputinfos.compnay">
+                        <input type="text" class="form-control" v-model="inputinfos.company">
                         <br>
                         <strong>주소(예>여의도동 광장아파트 1동 1001호):</strong>
-                        <input type="text" class="form-control" v-model="inputinfos.address" style="background-color: #ffe3d1;">
+                        <input type="text" class="form-control" v-model="address" style="background-color: #ffe3d1;">
                         <br>
                         <strong>생년월일(예>810520):</strong>
                         <input type="text" class="form-control" v-model="inputinfos.borndate">
 
-                        </form>
+                        <!-- </form> -->
                     </div>
                 </div>
             </div>
@@ -49,7 +49,7 @@
                 <div class="card">
                     <div class="card-header"><h5>INFO GROUP 3</h5></div>
                     <div class="card-body">
-                        <form @submit="formSubmit">
+                        <!-- <form @submit="formSubmit"> -->
                         <strong>대학교명(예>한국대):</strong>
                         <input type="text" class="form-control" v-model="inputinfos.college">
                         <br>
@@ -62,19 +62,19 @@
                         <strong>초등학교명(예>백제초):</strong>
                         <input type="text" class="form-control" v-model="inputinfos.elementaryschool">
 
-                        </form>
+                        <!-- </form> -->
                     </div>
                 </div>
             </div>
 
             <div class="row-md-4">
 
-                <button class="btn btn-danger btn-lg" >② 스크래핑 시작</button>
+                <button class="btn btn-danger btn-lg" @click="startScrapping()">② 스크래핑 시작</button>
             </div>
 
 
         </div>
-                <button class="btn btn-info btn-lg"  @click="setInputInfo">① 내정보 등록</button><br><br>
+                <button class="btn btn-info btn-lg"  @click="postInputInfo()">① 내정보 등록</button><br><br>
     </div>
 
                  
@@ -82,15 +82,47 @@
 
 <script type="text/javascript">
 import { mapState } from 'vuex'
+import axios from 'axios'
 
 export default {
   name: 'InputInfo',
-  mounted () {
-    this.$store.dispatch('setInputInfo')
-  },
+
+  data() {
+    return {
+        email:'',
+        hp: '',
+        account: '',
+        address: '',
+        name: '',
+    }},
   computed: mapState([
     'inputinfos'
-  ])
+  ]),
+  methods : {
+      postInputInfo : function() {
+        axios.post('https://blooming-cove-56374.herokuapp.com/user_info/', 
+        {
+          email: this.email,
+          hp: this.hp,
+          account: this.account,
+          address: this.address,
+          name: this.name,
+           }
+          ).then(response => {
+                console.log(response)
+                this.result = response.data
+            }).catch(ex => {
+                console.log("ERROR!!: ",ex)
+            })
+      },
+
+    startScrapping : function() {
+        axios.get('https://blooming-cove-56374.herokuapp.com/google_web/')
+        axios.get('https://blooming-cove-56374.herokuapp.com/naver_web/')
+        axios.get('https://blooming-cove-56374.herokuapp.com/naver_blog/')
+        axios.get('https://blooming-cove-56374.herokuapp.com/naver_cafe/')
+    },
+  },
 }
 </script>
 

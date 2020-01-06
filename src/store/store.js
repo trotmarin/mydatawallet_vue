@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import Axios from 'axios';
+// import Axios from 'axios';
 
 Vue.use(Vuex)
 Vue.use(VueAxios, axios)
@@ -17,22 +17,21 @@ export default new Vuex.Store({
   },
 
   actions: {
-    // setInputInfo ({ commit }) {
+
+  //   postInputInfo : async (store, inputinfos) => {
+  //     let { data } = await axios.post('https://blooming-cove-56374.herokuapp.com/user_info', inputinfos)
+  //     if(data.status == 200 ){
+  //     store.commit('ADD_INPUTINFO', inputinfos)
+  //     }
+  // },
+    // postInputInfo( { commit }) {
     //   axios
-    //     .post('http://127.0.0.1:8080/user_info')
-    //     .then(r => r.data)
-    //     .then(inputinfos => {
-    //     commit('ADD_INPUTINFO', inputinfos)
-    //     })
-    // },
-
-    setInputInfo : async (context, inputinfos) => {
-      let { data } = await Axios.post('https://blooming-cove-56374.herokuapp.com/user_info', inputinfos)
-      if(data.status == 200 ){
-      context.commit('ADD_INPUTINFO', inputinfos)
-      }
-    },
-
+    //   .post('https://blooming-cove-56374.herokuapp.com/user_info')
+    //   .then(r => r.data)
+    //   .then(inputinfos => {
+    //   commit('ADD_INPUTINFO', inputinfos)
+    //    })
+    //   },
 
     loadGoogleWeb ({ commit }) {
       axios
