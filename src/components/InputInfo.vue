@@ -32,13 +32,13 @@
                         <input type="text" class="form-control" v-model="name" placeholder="필수항목"  style="background-color: #ffe3d1">
                         <br>
                         <strong>직장명(예>국민은행):</strong>
-                        <input type="text" class="form-control" v-model="inputinfos.company">
+                        <input type="text" class="form-control" placeholder="(입력금지)구현중" v-model="inputinfos.company">
                         <br>
                         <strong>주소(예>여의도동 광장아파트 1동 1001호):</strong>
                         <input type="text" class="form-control" v-model="address" placeholder="필수항목" style="background-color: #ffe3d1;">
                         <br>
                         <strong>생년월일(예>810520):</strong>
-                        <input type="text" class="form-control" v-model="inputinfos.borndate">
+                        <input type="text" class="form-control" placeholder="(입력금지)구현중" v-model="inputinfos.borndate">
 
                         <!-- </form> -->
                     </div>
@@ -51,16 +51,16 @@
                     <div class="card-body">
                         <!-- <form @submit="formSubmit"> -->
                         <strong>대학교명(예>한국대):</strong>
-                        <input type="text" class="form-control" v-model="inputinfos.college">
+                        <input type="text" class="form-control" placeholder="(입력금지)구현중" v-model="inputinfos.college">
                         <br>
                         <strong>고등학교명(예>고려고):</strong>
-                        <input type="text" class="form-control" v-model="inputinfos.highschool">
+                        <input type="text" class="form-control" placeholder="(입력금지)구현중" v-model="inputinfos.highschool">
                         <br>
                         <strong>중학교명(예>신라중):</strong>
-                        <input type="text" class="form-control" v-model="inputinfos.middleschool">
+                        <input type="text" class="form-control" placeholder="(입력금지)구현중" v-model="inputinfos.middleschool">
                         <br>
                         <strong>초등학교명(예>백제초):</strong>
-                        <input type="text" class="form-control" v-model="inputinfos.elementaryschool">
+                        <input type="text" class="form-control" placeholder="(입력금지)구현중" v-model="inputinfos.elementaryschool">
 
                         <!-- </form> -->
                     </div>
@@ -69,12 +69,13 @@
 
             <div class="row-md-4">
 
-                <button class="btn btn-danger btn-lg" @click="startScrapping()">② 스크래핑 시작</button>
+                <button type="submit" class="btn btn-danger btn-lg" @click="startScrapping()">② 스크래핑 시작</button>
             </div>
 
 
         </div>
-                <button class="btn btn-info btn-lg"  @click="postInputInfo()">① 내정보 등록</button><br><br>
+                <button type="submit" class="btn btn-info btn-lg" @click="postInputInfo()">① 내정보 등록</button> &nbsp;
+                <br><br>
     </div>
 
                  
@@ -82,7 +83,11 @@
 
 <script type="text/javascript">
 import { mapState } from 'vuex'
+import Vue from 'vue';
 import axios from 'axios'
+import Loading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/vue-loading.css'
+Vue.use(Loading);
 
 
 export default {
@@ -105,8 +110,15 @@ export default {
     'inputinfos'
   ]),
   methods : {
+   
       postInputInfo : function() {
-        
+        let loader = this.$loading.show({
+        // Optional parameters
+        container: this.fullPage ? null : this.$refs.formContainer,
+        canCancel: true,
+        onCancel: this.onCancel,
+        });
+
         var hp_sub = this.hp.substr( this.hp.length-4, 4 )
         axios.post('https://blooming-cove-56374.herokuapp.com/user_info/', 
         {
@@ -119,18 +131,31 @@ export default {
           ).then(response => {
                 console.log(response)
                 this.result = response.data
+                loader.hide()
             }).catch(ex => {
                 console.log("ERROR!!: ",ex)
             })
       },
 
     startScrapping : function() {
+        let loader = this.$loading.show({
+            // Optional parameters
+            container: this.fullPage ? null : this.$refs.formContainer,
+            canCancel: true,
+            onCancel: this.onCancel,
+            });
         axios.get('https://blooming-cove-56374.herokuapp.com/google_web/')
         axios.get('https://blooming-cove-56374.herokuapp.com/naver_web/')
         axios.get('https://blooming-cove-56374.herokuapp.com/naver_blog/')
         axios.get('https://blooming-cove-56374.herokuapp.com/naver_cafe/')
-    },
-  },
+        .then(response => {
+                console.log(response)
+                this.result = response.data
+                loader.hide()
+            }).catch(ex => {
+                console.log("ERROR!!: ",ex)
+            })}
+}
 }
 </script>
 

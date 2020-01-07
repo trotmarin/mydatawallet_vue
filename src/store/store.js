@@ -14,6 +14,8 @@ export default new Vuex.Store({
     navercafes: [],
     naverblogs: [],
     inputinfos: [],
+    refCount: 0,
+    isLoading: false
   },
 
   actions: {
@@ -86,6 +88,18 @@ export default new Vuex.Store({
 
   },
   mutations: {
+    
+    loading(state, isLoading) {
+      console.log({isLoading})
+      if (isLoading) {
+        state.refCount++;
+        state.isLoading = true;
+      } else if (state.refCount > 0) {
+        state.refCount--;
+        state.isLoading = (state.refCount > 0);
+      }
+    },
+
     SET_INPUTINFO : (state, inputinfos) => {
       state.inputinfos =inputinfos
     },

@@ -26,6 +26,7 @@ import NaverWeb from './components/NaverWeb.vue'
 import InputInfo from './components/InputInfo.vue'
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import VueRouter from 'vue-router'
+import { mapState } from 'vuex';
 
 const router = new VueRouter({
   routes :[
@@ -41,7 +42,27 @@ const router = new VueRouter({
 
 export default {
   name: 'app',
-  router
+  router,
+    computed: {
+    ...mapState(['isLoading', 'refCount'])
+  },
+  created() {
+    this.axios.interceptors.request.use((config) => {
+      this.$store.commit('loading', true);
+      return config;
+    }, (error) => {
+      this.$store.commit('loading', false);
+      return Promise.reject(error);
+    });
+
+    this.axios.interceptors.response.use((response) => {
+      this.$store.commit('loading', false);
+      return response;
+    }, (error) => {
+      this.$store.commit('loading', false);
+      return Promise.reject(error);
+    });
+  }
 }
 </script>
 
